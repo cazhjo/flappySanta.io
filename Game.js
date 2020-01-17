@@ -1,4 +1,5 @@
 let canv, ctx;
+
 var start = false;
 //Position- och spel fysik variabler
 var x, y,
@@ -210,9 +211,7 @@ function highScore() {
 function restart(event) {
   if (isDead) {
     var pos = getMousePos(canv, event);
-    var mouseX = pos.mouseX;
-    var mouseY = pos.mouseY;
-    if (mouseX > canv.width / 2 - 175 / 2 && mouseY > 343 && mouseY < 343 + 25 && mouseX < (canv.width / 2 - 175 / 2) + (175 / 2.07)) {
+    if (pos.mouseX > canv.width / 2 - 175 / 2 && pos.mouseY > 343 && pos.mouseY < 343 + 25 && pos.mouseX < (canv.width / 2 - 175 / 2) + (175 / 2.07)) {
       reset();
       init();
     }
@@ -223,19 +222,12 @@ document.addEventListener("click", restart)
 function addScore(evt) {
   if (isDead) {
     var pos = getMousePos(canv, evt)
-    var mouseX = pos.mouseX;
-    var mouseY = pos.mouseY;
-    if (mouseX > (canv.width / 2 + 175 / 2) - (175 / 2.07) && mouseY > 343 && mouseY < 343 + 25 && mouseX < canv.width / 2 + 175 / 2) {
-      console.log("hej");
+    if (pos.mouseX > (canv.width / 2 + 175 / 2) - (175 / 2.07) && pos.mouseY > 343 && pos.mouseY < 343 + 25 && pos.mouseX < canv.width / 2 + 175 / 2) {
+      changePage(score);
     }
   }
 }
-document.addEventListener("click", addScore(evt));
-
-document.addEventListener("click", function(evt){
-  var pos = getMousePos(canv, evt)
-  setInterval(drawRect(pos.mouseX, pos.mouseY, 15, 15, "red", true), 50);
-}, false);
+document.addEventListener("click", addScore);
 
 function drawRect(x, y, width, height, color, fill) {
   ctx.beginPath();
@@ -258,12 +250,12 @@ function clearScreen() {
   ctx.clearRect(0, 0, canv.width, canv.height);
 }
 
-function getMousePos(canvas, evt){
+function getMousePos(canvas, evt) {
   var rect = canvas.getBoundingClientRect(),
-      scaleX = canvas.width / rect.width,
-      scaleY = canvas.height / rect.height;
+    scaleX = canvas.width / rect.width,
+    scaleY = canvas.height / rect.height;
 
-  return{
+  return {
     mouseX: (evt.clientX - rect.left) * scaleX,
     mouseY: (evt.clientY - rect.top) * scaleY
   };
