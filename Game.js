@@ -223,7 +223,8 @@ function addScore(evt) {
   if (isDead) {
     var pos = getMousePos(canv, evt)
     if (pos.mouseX > (canv.width / 2 + 175 / 2) - (175 / 2.07) && pos.mouseY > 343 && pos.mouseY < 343 + 25 && pos.mouseX < canv.width / 2 + 175 / 2) {
-      changePage(score);
+      sessionStorage.setItem('tempScore', score);
+      changePage();
     }
   }
 }
