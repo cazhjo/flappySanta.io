@@ -185,7 +185,12 @@ function test() {
 
 function highScore() {
   var highScoreList = JSON.parse(localStorage.getItem("highscore"))
-  highScoreList.sort((a, b) => b - a);
+  if (highScoreList != null) {
+    highScoreList.sort((a, b) => b - a);
+  }
+  else{
+    highScoreList = [];
+  }
   var width = 175;
   var height = 138;
 
