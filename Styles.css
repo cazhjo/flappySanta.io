@@ -63,6 +63,29 @@ canvas {
     font-size: 34px;
 }
 
+#name-input-box{
+    position: absolute;
+    height: 40%;
+    background-color: rgb(94, 94, 94);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    visibility: hidden;
+}
+
+#name-input-box input{
+    border: none;
+    width: 98%;
+    background-color: white;
+    text-align: center;
+    border-radius: 5px;
+}
+
+#name-input-box button{
+    border: none;
+    margin: auto;
+}
 
 @media screen and (min-width: 600px) {
     #about .container {
