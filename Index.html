@@ -25,7 +25,7 @@
   <script src="Scripts.js"></script>
 </head>
 
-<body id="home" onload="checkScore()">
+<body id="home" onload="checkScore(); printHighscore()">
 
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <img src="Pics/tomte.png" class="logo">
@@ -34,11 +34,7 @@
     </div>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-<<<<<<< HEAD
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-=======
     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
->>>>>>> 11a36e793a6f728110b5ae96878a847f133ae690
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
@@ -55,12 +51,9 @@
       </ul>
     </div>
   </nav>
-<<<<<<< HEAD
-
-  <div id="leaderboard" class="col-8 col-sm-6 col-md-5 col-lg-5 col-xl-4"></div>
-=======
   
   <div id="leaderboard" class="col-8 col-sm-6 col-md-5 col-lg-5 col-xl-4">
+    <ol id="leaderboard-list"></ol>
     <div id="name-input-box" class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 text-center">
       <div class="form-group" style="color: white;">
         <label for="name-input">Name</label>
@@ -69,7 +62,6 @@
       <div class="btn btn-success" onclick="submitName()">Submit</div>
     </div>
   </div>
->>>>>>> 11a36e793a6f728110b5ae96878a847f133ae690
 </body>
 
 </html>

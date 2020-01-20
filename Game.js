@@ -183,14 +183,8 @@ function test() {
   }
 }
 
-var highScoreList = [];
-highScoreList.push(200);
-highScoreList.push(250);
-highScoreList.push(200);
-highScoreList.push(234);
-highScoreList.push(200000);
-highScoreList.push(2002);
 function highScore() {
+  var highScoreList = JSON.parse(localStorage.getItem("highscore"))
   highScoreList.sort((a, b) => b - a);
   var width = 175;
   var height = 138;
@@ -198,7 +192,7 @@ function highScore() {
   drawRect(canv.width / 2 - width / 2, canv.height / 2.26 - height / 2, width, height, "black", true);
 
   var temp = 225;
-  for (let j = 0; j < 5; j++) {
+  for (let j = 0; j < highScoreList.length; j++) {
     drawText(canv.width / 2.7, temp, "25px arial", "white", "start", j + 1 + ". " + highScoreList[j]);
     temp += 25;
   }

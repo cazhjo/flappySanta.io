@@ -1,11 +1,17 @@
 function changePage() {
-    window.location = "Index.html";
+    window.location.href = "Index.html";
 }
 
 
 function changeVisibility(show) {
     var box = $("#name-input-box");
-    show == true ? box.css("visibility", "visible") : box.css("visibility", "hidden");
+
+    if (show) {
+        box.css("visibility", "visible")
+    }
+    else {
+        box.css("visibility", "hidden")
+    }
 }
 
 function checkScore() {
@@ -22,19 +28,25 @@ function addScoreToStorage(name) {
     var exists = false;
 
     var storage = JSON.parse(localStorage.getItem("highscore"));
-    storage = null ?? [];
+    if (storage == null) {
+        storage = [];
+    }
     highscore = storage.slice(0);
 
-    for (let item of highscore) {
-        if (item.slice(0, nameLength) == name) {
-            exists = true;
-            if (parseInt(item.slice(nameLength + 1)) < tempScore) {
-                item = (name + ": " + tempScore);
+    if (highscore.length > 0) {
+        for (let item of highscore) {
+            if (item.slice(0, nameLength) == name) {
+                exists = true;
+                if (parseInt(item.slice(nameLength + 1)) < tempScore) {
+                    exists = false;
+                    const index = highscore.indexOf(item);
+                    highscore.splice(index, 1);
+                }
             }
         }
     }
 
-    if(!exists){
+    if (!exists) {
         highscore.push(name + ": " + tempScore);
     }
 
@@ -45,4 +57,18 @@ function addScoreToStorage(name) {
 function submitName() {
     var name = $("#name-input").val();
     addScoreToStorage(name);
+    changeVisibility(false);
+    sessionStorage.clear();
+}
+
+function printHighscore() {
+    var highscore = JSON.parse(localStorage.getItem("highscore"));
+    var leaderboard = $("#leaderboard-list");
+    if (highscore.length > 0) {
+        for (const high of highscore) {
+            let temp = document.createElement("li");
+            temp.innerText = high;
+            leaderboard.append(temp);
+        }
+    }
 }
