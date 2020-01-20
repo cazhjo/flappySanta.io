@@ -197,7 +197,10 @@ function highScore() {
   drawRect(canv.width / 2 - width / 2, canv.height / 2.26 - height / 2, width, height, "black", true);
 
   var temp = 225;
-  for (let j = 0; j < highScoreList.length; j++) {
+  for (let j = 0; j < 5; j++) {
+    if (j >= 5) {
+      break;
+    }
     drawText(canv.width / 2.7, temp, "25px arial", "white", "start", j + 1 + ". " + highScoreList[j]);
     temp += 25;
   }
