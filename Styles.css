@@ -45,6 +45,7 @@ html, body {
     height: 40%;
     border-radius: 15px;
     margin: 10% auto;
+    overflow-y: scroll;
 }
 
 canvas {
@@ -87,6 +88,11 @@ canvas {
     margin: auto;
 }
 
+ol{
+    text-align: start;
+    color: white;
+    font-size: 20px;
+}
 @media screen and (min-width: 600px) {
     #about .container {
         width: 80%;
@@ -99,6 +105,7 @@ canvas {
         font-size: 34px;
     }
 }
+
 
 @media screen and (min-width: 768px) {
     #about .container {

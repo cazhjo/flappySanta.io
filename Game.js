@@ -93,45 +93,6 @@ function game() {
   increaseScore();
 }
 
-function moveObstacles() {
-  var moveLeft = isDead ? 0 : 3;
-
-  for (const obs of obstacles) {
-    if (obs.x < -300) {
-      const index = obstacles.indexOf(obs);
-      if (index > -1) {
-        obstacles.splice(index, 1);
-      }
-      //continue;
-    }
-    obs.move(moveLeft);
-    obs.draw();
-  }
-}
-var scoreArray = [];
-var obstacles = [];
-
-//skapar hinder och lägger in dom i varsin array
-function createObstacles() {
-  var obstacle = new Obstacle(canv.width, 50, 157);
-  obstacles.push(obstacle);
-  scoreArray.push(obstacle);
-}
-
-function collisionDetection() {
-  for (const obs of obstacles) {
-    if ((x + playerPos.width > obs.x) && (y < obs.Top.height)) {
-      if (!(x > obs.x + obs.width))
-        isDead = true;
-    }
-
-    if ((x + playerPos.width > obs.x) && (y + playerPos.height > obs.Bottom.y)) {
-      if (!(x > obs.x + obs.width))
-        isDead = true;
-    }
-  }
-}
-
 function increaseScore() {
   if (scoreArray.length > 0) {
     if (x > scoreArray[0].x + scoreArray[0].width && !isDead) {
@@ -184,24 +145,21 @@ function test() {
 }
 
 function highScore() {
-  var highScoreList = JSON.parse(localStorage.getItem("highscore"))
-  if (highScoreList != null) {
-    highScoreList.sort((a, b) => b - a);
-  }
-  else{
+  var highScoreList = JSON.parse(localStorage.getItem("highscore"));
+
+  if (highScoreList == null) {
     highScoreList = [];
   }
+
   var width = 175;
   var height = 138;
 
   drawRect(canv.width / 2 - width / 2, canv.height / 2.26 - height / 2, width, height, "black", true);
 
-  var temp = 225;
-  for (let j = 0; j < 5; j++) {
-    if (j >= 5) {
-      break;
-    }
-    drawText(canv.width / 2.7, temp, "25px arial", "white", "start", j + 1 + ". " + highScoreList[j]);
+  var temp = 224;
+
+  for (let j = 0; j < highScoreList.length && j < 5; j++) {
+    drawText(canv.width / 2.8, temp, "20px arial", "white", "start", j + 1 + ". " + `${highScoreList[j].key}: ${highScoreList[j].value}`);
     temp += 25;
   }
 
@@ -210,6 +168,7 @@ function highScore() {
   drawRect(canv.width / 2 + width / 2, 343, -width / 2.07, 25, "black", true);
   drawText(canv.width / 1.96, 361, "bold 16px arial", "white", "start", "Add Score");
 }
+
 function restart(event) {
   if (isDead) {
     var pos = getMousePos(canv, event);
@@ -232,6 +191,7 @@ function addScore(evt) {
 }
 document.addEventListener("click", addScore);
 
+//Gör draw funktionerna så att det blir enklare
 function drawRect(x, y, width, height, color, fill) {
   ctx.beginPath();
   ctx.rect(x, y, width, height)
@@ -253,6 +213,7 @@ function clearScreen() {
   ctx.clearRect(0, 0, canv.width, canv.height);
 }
 
+//Får musens position på canvasen på ett responsivt sett
 function getMousePos(canvas, evt) {
   var rect = canvas.getBoundingClientRect(),
     scaleX = canvas.width / rect.width,
