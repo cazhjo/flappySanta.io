@@ -9,6 +9,8 @@ var x, y,
   isDead = false;
 score = 0;
 
+var gameAnimationFrame;
+
 var playerImg = new Image();
 var inactive = new Image();
 var active = new Image();
@@ -18,6 +20,7 @@ var pic2 = "Pics/active.png"
 var isActive = false;
 
 var pause;
+var tempGame;
 
 function init() {
   canv = document.getElementById("game");
@@ -69,6 +72,10 @@ document.addEventListener('keydown', function (event) {
 }, false);
 
 function game() {
+  //Slutar animera när gameAnimationFrame är false
+  if (gameAnimationFrame) {
+    window.requestAnimationFrame(game);
+  }
   //Ökar velocity om den är mindre än speed
   if (velocity < speed) {
     velocity += 1;
@@ -92,6 +99,7 @@ function game() {
     ctx.drawImage(active, x, canv.height - 50, 70, 60);
     isDead = true;
     deathScreen();
+    gameAnimationFrame = false;
   }
   else {
     ctx.drawImage(playerImg, x, y, 70, 60);
@@ -111,7 +119,6 @@ function increaseScore() {
   }
 }
 
-var gameInterval;
 var obsactleInterval;
 
 //Väntar med att starta förän man trycker space
@@ -124,7 +131,8 @@ function startGame() {
 
   if (start) {
     clearInterval(pause);
-    gameInterval = setInterval(game, 1000 / 60);
+    tempGame = window.requestAnimationFrame(game);
+    gameAnimationFrame = true;
     obstacleInterval = setInterval(createObstacles, 1500);
   }
 }
@@ -138,7 +146,6 @@ function reset() {
   start = false;
   isDead = false;
   score = 0;
-  clearInterval(gameInterval);
   clearInterval(obstacleInterval);
   clearScreen();
   scoreArray = [];
@@ -171,11 +178,11 @@ function highScore() {
   drawRect(canv.width / 2 - width / 2, canv.height / 2.26 - height / 2, width, height, "black", true);
 
   //För att sätta ett jämt avstånd mellan dom olika poängen
-  var temp = 224;
+  var temp = canv.height / 2 - height / 2 - 10;
 
   for (let j = 0; j < highScoreList.length && j < 5; j++) {
     //Målar ut namn och poäng och använder j för position
-    drawText(canv.width / 2.8, temp, "20px arial", "white", "start", j + 1 + ". " + `${highScoreList[j].key}: ${highScoreList[j].value}`);
+    drawText(canv.width / 2 - width / 2 + 3, temp, "20px arial", "white", "start", j + 1 + ". " + `${highScoreList[j].key}: ${highScoreList[j].value}`);
     //Avståndet mellan positionerna
     temp += 25;
   }
