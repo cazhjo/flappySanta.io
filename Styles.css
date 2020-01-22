@@ -146,8 +146,8 @@ ol{
 @media screen and (min-width: 1500px) {
     #about .container {
         font-size: 18px;
-        padding: 50px;
-        margin-top: 10%;
+        padding: 40px;
+        margin-top: 5%;
     }
 
     .brand {
