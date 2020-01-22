@@ -234,7 +234,7 @@ function clearScreen() {
   ctx.clearRect(0, 0, canv.width, canv.height);
 }
 
-//Får musens position på canvasen på ett responsivt sett
+//Får musens position på canvasen på ett responsivt sätt
 function getMousePos(canvas, evt) {
   var rect = canvas.getBoundingClientRect(),
     scaleX = canvas.width / rect.width,
