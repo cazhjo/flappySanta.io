@@ -20,7 +20,7 @@ class Obstacle {
     constructor(x, width, gap) {
         this.x = x;
         this.width = width;
-        this.gap = gap
+        this.gap = gap;
         this.y = 0;
 
         this.Top = new this.Top(this.x, this.y, this.width, Math.random() * (canv.height - 150 - 150) + 150);
