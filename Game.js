@@ -20,7 +20,6 @@ var pic2 = "Pics/active.png"
 var isActive = false;
 
 var pause;
-var pausePhone;
 var tempGame;
 
 function init() {
@@ -39,7 +38,7 @@ function init() {
   drawText(canv.width / 2, canv.height - 100, "30px arial", "white", "center", "Press space to start");
 
   pause = setInterval(startGame, 100);
-  pausePhone = setInterval(startGamePhone, 100);
+  addEventListener('touchend', startGamePhone(), true);
 
   // För att måla ut första stillbilden efter den har laddats in
   function drawImg() {
@@ -74,7 +73,7 @@ function jump(event) {
   isActive = true;
 }
 document.addEventListener('keydown', jump, false);
-document.addEventListener('touchend', function(event){
+document.addEventListener('touchend', function (event) {
   if (velocity > -speed && !isDead) {
     velocity = -12;
     playerImg = active;
@@ -142,21 +141,18 @@ function startGame() {
 
   if (start) {
     clearInterval(pause);
-    clearInterval(pausePhone);
     tempGame = window.requestAnimationFrame(game);
     gameAnimationFrame = true;
     obstacleInterval = setInterval(createObstacles, 1500);
   }
 }
 
-function startGamePhone(){
-  document.addEventListener('touchend', function (event) {
+function startGamePhone() {
     clearInterval(pause);
-    clearInterval(pausePhone);
     tempGame = window.requestAnimationFrame(game);
     gameAnimationFrame = true;
     obstacleInterval = setInterval(createObstacles, 1500);
-  }, false);
+    removeEventListener('touchend', startGamePhone, true);
 }
 
 function deathScreen() {
