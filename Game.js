@@ -9,6 +9,8 @@ var x, y,
   isDead = false;
 score = 0;
 
+var gameAnimationFrame;
+
 var playerImg = new Image();
 var inactive = new Image();
 var active = new Image();
@@ -18,6 +20,7 @@ var pic2 = "Pics/active.png"
 var isActive = false;
 
 var pause;
+var tempGame;
 
 function init() {
   canv = document.getElementById("game");
@@ -38,7 +41,7 @@ function init() {
 
   // För att måla ut första stillbilden efter den har laddats in
   function drawImg() {
-    x = canv.width / 2.26;
+    x = canv.width / 2 - 35;
     y = canv.height / 2;
     ctx.drawImage(inactive, x, y, 70, 60);
   }
@@ -69,6 +72,10 @@ document.addEventListener('keydown', function (event) {
 }, false);
 
 function game() {
+  //Slutar animera när gameAnimationFrame är false
+  if (gameAnimationFrame) {
+    window.requestAnimationFrame(game);
+  }
   //Ökar velocity om den är mindre än speed
   if (velocity < speed) {
     velocity += 1;
@@ -92,6 +99,7 @@ function game() {
     ctx.drawImage(active, x, canv.height - 50, 70, 60);
     isDead = true;
     deathScreen();
+    gameAnimationFrame = false;
   }
   else {
     ctx.drawImage(playerImg, x, y, 70, 60);
@@ -111,7 +119,6 @@ function increaseScore() {
   }
 }
 
-var gameInterval;
 var obsactleInterval;
 
 //Väntar med att starta förän man trycker space
@@ -124,7 +131,8 @@ function startGame() {
 
   if (start) {
     clearInterval(pause);
-    gameInterval = setInterval(game, 1000 / 60);
+    tempGame = window.requestAnimationFrame(game);
+    gameAnimationFrame = true;
     obstacleInterval = setInterval(createObstacles, 1500);
   }
 }
@@ -138,7 +146,6 @@ function reset() {
   start = false;
   isDead = false;
   score = 0;
-  clearInterval(gameInterval);
   clearInterval(obstacleInterval);
   clearScreen();
   scoreArray = [];
@@ -156,6 +163,8 @@ function animate() {
   }
 }
 
+var width = 175;
+var height = 138;
 function highScore() {
   //Hämtar highscore från localstorage
   var highScoreList = JSON.parse(localStorage.getItem("highscore"));
@@ -164,34 +173,32 @@ function highScore() {
     highScoreList = [];
   }
 
-  var width = 175;
-  var height = 138;
 
   //Rutan bakom poängen
   drawRect(canv.width / 2 - width / 2, canv.height / 2.26 - height / 2, width, height, "black", true);
 
   //För att sätta ett jämt avstånd mellan dom olika poängen
-  var temp = 224;
+  var temp = canv.height / 2 - height / 2 - 10;
 
   for (let j = 0; j < highScoreList.length && j < 5; j++) {
     //Målar ut namn och poäng och använder j för position
-    drawText(canv.width / 2.8, temp, "20px arial", "white", "start", j + 1 + ". " + `${highScoreList[j].key}: ${highScoreList[j].value}`);
+    drawText(canv.width / 2 - width / 2 + 3, temp, "20px arial", "white", "start", j + 1 + ". " + `${highScoreList[j].key}: ${highScoreList[j].value}`);
     //Avståndet mellan positionerna
     temp += 25;
   }
 
   //Målar ut knapparna för att lägga till poäng och starta om
-  drawRect(canv.width / 2 - width / 2, 343, width / 2.07, 25, "black", true);
-  drawText(canv.width / 2.75, 361, "bold 17px arial", "white", "start", "Restart");
-  drawRect(canv.width / 2 + width / 2, 343, -width / 2.07, 25, "black", true);
-  drawText(canv.width / 1.96, 361, "bold 16px arial", "white", "start", "Add Score");
+  drawRect(canv.width / 2 - width / 2, (canv.height / 2.26 + height / 2) + 5, width / 2.07, 25, "black", true);
+  drawText((canv.width / 2 - width / 2) + (width / 2.07) / 2, (canv.height / 2.26 + height / 2) + 25, "bold 17px arial", "white", "center", "Restart");
+  drawRect(canv.width / 2 + width / 2, (canv.height / 2.26 + height / 2) + 5, -width / 2.07, 25, "black", true);
+  drawText((canv.width / 2 + width / 2) + (-width / 2.07) / 2, (canv.height / 2.26 + height / 2) + 25, "bold 16px arial", "white", "center", "Add Score");
 }
 
 //Gör samma sak som på addScore fast restarar
 function restart(event) {
   if (isDead) {
     var pos = getMousePos(canv, event);
-    if (pos.mouseX > canv.width / 2 - 175 / 2 && pos.mouseY > 343 && pos.mouseY < 343 + 25 && pos.mouseX < (canv.width / 2 - 175 / 2) + (175 / 2.07)) {
+    if (pos.mouseX > canv.width / 2 - 175 / 2 && pos.mouseY > (canv.height / 2.26 + height / 2) && pos.mouseY < (canv.height / 2.26 + height / 2) + 25 && pos.mouseX < (canv.width / 2 - 175 / 2) + (175 / 2.07)) {
       reset();
       init();
     }
@@ -203,7 +210,7 @@ document.addEventListener("click", restart);
 function addScore(evt) {
   if (isDead) {
     var pos = getMousePos(canv, evt)
-    if (pos.mouseX > (canv.width / 2 + 175 / 2) - (175 / 2.07) && pos.mouseY > 343 && pos.mouseY < 343 + 25 && pos.mouseX < canv.width / 2 + 175 / 2) {
+    if (pos.mouseX > (canv.width / 2 + 175 / 2) - (175 / 2.07) && pos.mouseY > (canv.height / 2.26 + height / 2) && pos.mouseY < (canv.height / 2.26 + height / 2) + 25 && pos.mouseX < canv.width / 2 + 175 / 2) {
       //Sparar undan score för att använda det i Index.html
       sessionStorage.setItem('tempScore', score);
       changePage();
