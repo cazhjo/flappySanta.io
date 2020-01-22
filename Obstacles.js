@@ -28,12 +28,14 @@ class Obstacle {
         this.Bottom = new this.Bottom(this.x, this.gap, this.width, canv.height - this.gap);
     }
 
+    //Metod för att enkelt flytta hinder
     move(amount) {
         this.x -= amount;
         this.Top.x -= amount;
         this.Bottom.x -= amount;
     }
 
+    //Metod för att enkelt måla ut hinder
     draw() {
         drawRect(this.x, this.Top.y, this.width, this.Top.height, "black", true);
         drawRect(this.x, this.Bottom.y, this.width, this.Bottom.height, "black", true);
@@ -43,12 +45,16 @@ class Obstacle {
 var scoreArray = [];
 var obstacles = [];
 
+//skapar hinder och lägger in dom i varsin array
 function createObstacles() {
     var obstacle = new Obstacle(canv.width, 50, 157);
+    //för att måla ut
     obstacles.push(obstacle);
+    //för att räkna poäng
     scoreArray.push(obstacle);
 }
 
+//Flyttar hinder
 function moveObstacles() {
     var moveLeft = isDead ? 0 : 3;
   
@@ -65,7 +71,6 @@ function moveObstacles() {
     }
   }
 
-//skapar hinder och lägger in dom i varsin array
 function collisionDetection() {
     for (const obs of obstacles) {
         if ((x + playerPos.width > obs.x) && (y < obs.Top.height)) {

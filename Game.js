@@ -36,6 +36,7 @@ function init() {
 
   pause = setInterval(startGame, 100);
 
+  // För att måla ut första stillbilden efter den har laddats in
   function drawImg() {
     x = canv.width / 2.26;
     y = canv.height / 2;
@@ -51,12 +52,13 @@ var playerPos = {
 
 var imgInt;
 
+//Kollar om man har tryckt space och om man inte är död så sätts velocity till -12 men om man är död så startar det om
 document.addEventListener('keydown', function (event) {
   if (event.keyCode == "32") {
     if (velocity > -speed && !isDead) {
       velocity = -12;
       playerImg = active;
-      imgInt = setInterval(test, 5)
+      imgInt = setInterval(animate, 5)
     }
     else if (isDead) {
       reset();
@@ -67,21 +69,24 @@ document.addEventListener('keydown', function (event) {
 }, false);
 
 function game() {
-
+  //Ökar velocity om den är mindre än speed
   if (velocity < speed) {
     velocity += 1;
   }
 
+  //multiplerar velocity med friction varje frame för att spelaren ska falla snabbare och snabbare
   velocity *= friction;
   y += velocity;
   playerPos.y = y;
 
+  //Rensar skärmen och sedan flyttar hinderna och kollar om man har åkt in i något av hinderna
   clearScreen();
   moveObstacles();
   collisionDetection();
 
   drawText(canv.width / 2, 150, "30px arial", "white", "center", score);
 
+  //Kollar om man nuddar marken isådanafall så dör man annars målar man ut tomten på nytt med nya y-positionen
   if (y > canv.height - 50) {
     velocity = 0;
     ctx.drawImage(active, x, canv.height - 50, 70, 60);
@@ -96,6 +101,7 @@ function game() {
   increaseScore();
 }
 
+//Kollar på elementet som ligger längst fram för att kolla om man är förbi så ökar poäng och sen tar bort elementet
 function increaseScore() {
   if (scoreArray.length > 0) {
     if (x > scoreArray[0].x + scoreArray[0].width && !isDead) {
@@ -108,6 +114,7 @@ function increaseScore() {
 var gameInterval;
 var obsactleInterval;
 
+//Väntar med att starta förän man trycker space
 function startGame() {
   document.addEventListener('keydown', function (event) {
     if (event.keyCode == "32") {
@@ -126,6 +133,7 @@ function deathScreen() {
   highScore();
 }
 
+//Rensar allting så att det funkar som det ska när man startar om
 function reset() {
   start = false;
   isDead = false;
@@ -137,8 +145,9 @@ function reset() {
   obstacles = [];
 }
 
+//För att hålla armarna nere när man hoppar
 var i = 0;
-function test() {
+function animate() {
   i++;
   if (i == 25) {
     i = 0;
@@ -148,6 +157,7 @@ function test() {
 }
 
 function highScore() {
+  //Hämtar highscore från localstorage
   var highScoreList = JSON.parse(localStorage.getItem("highscore"));
 
   if (highScoreList == null) {
@@ -157,21 +167,27 @@ function highScore() {
   var width = 175;
   var height = 138;
 
+  //Rutan bakom poängen
   drawRect(canv.width / 2 - width / 2, canv.height / 2.26 - height / 2, width, height, "black", true);
 
+  //För att sätta ett jämt avstånd mellan dom olika poängen
   var temp = 224;
 
   for (let j = 0; j < highScoreList.length && j < 5; j++) {
+    //Målar ut namn och poäng och använder j för position
     drawText(canv.width / 2.8, temp, "20px arial", "white", "start", j + 1 + ". " + `${highScoreList[j].key}: ${highScoreList[j].value}`);
+    //Avståndet mellan positionerna
     temp += 25;
   }
 
+  //Målar ut knapparna för att lägga till poäng och starta om
   drawRect(canv.width / 2 - width / 2, 343, width / 2.07, 25, "black", true);
   drawText(canv.width / 2.75, 361, "bold 17px arial", "white", "start", "Restart");
   drawRect(canv.width / 2 + width / 2, 343, -width / 2.07, 25, "black", true);
   drawText(canv.width / 1.96, 361, "bold 16px arial", "white", "start", "Add Score");
 }
 
+//Gör samma sak som på addScore fast restarar
 function restart(event) {
   if (isDead) {
     var pos = getMousePos(canv, event);
@@ -183,12 +199,12 @@ function restart(event) {
 }
 document.addEventListener("click", restart);
 
-
-
+//När man klickar på musen så går den in i funktionen och kollar om mus-positionen är inom Add Score knappen
 function addScore(evt) {
   if (isDead) {
     var pos = getMousePos(canv, evt)
     if (pos.mouseX > (canv.width / 2 + 175 / 2) - (175 / 2.07) && pos.mouseY > 343 && pos.mouseY < 343 + 25 && pos.mouseX < canv.width / 2 + 175 / 2) {
+      //Sparar undan score för att använda det i Index.html
       sessionStorage.setItem('tempScore', score);
       changePage();
     }
