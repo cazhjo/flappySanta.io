@@ -20,6 +20,7 @@ var pic2 = "Pics/active.png"
 var isActive = false;
 
 var pause;
+var pausePhone;
 var tempGame;
 
 function init() {
@@ -38,6 +39,7 @@ function init() {
   drawText(canv.width / 2, canv.height - 100, "30px arial", "white", "center", "Press space to start");
 
   pause = setInterval(startGame, 100);
+  pausePhone = setInterval(startGamePhone, 100);
 
   // För att måla ut första stillbilden efter den har laddats in
   function drawImg() {
@@ -56,18 +58,27 @@ var playerPos = {
 var imgInt;
 
 //Kollar om man har tryckt space och om man inte är död så sätts velocity till -12 men om man är död så startar det om
-document.addEventListener('keydown', function (event) {
+
+function jump(event) {
   if (event.keyCode == "32") {
     if (velocity > -speed && !isDead) {
       velocity = -12;
       playerImg = active;
       imgInt = setInterval(animate, 5)
     }
-    else if (isDead) {
-      reset();
-      init();
-    }
-    isActive = true;
+  }
+  else if (isDead) {
+    reset();
+    init();
+  }
+  isActive = true;
+}
+document.addEventListener('keydown', jump, false);
+document.addEventListener('touchend', function(event){
+  if (velocity > -speed && !isDead) {
+    velocity = -12;
+    playerImg = active;
+    imgInt = setInterval(animate, 5)
   }
 }, false);
 
@@ -131,10 +142,21 @@ function startGame() {
 
   if (start) {
     clearInterval(pause);
+    clearInterval(pausePhone);
     tempGame = window.requestAnimationFrame(game);
     gameAnimationFrame = true;
     obstacleInterval = setInterval(createObstacles, 1500);
   }
+}
+
+function startGamePhone(){
+  document.addEventListener('touchend', function (event) {
+    clearInterval(pause);
+    clearInterval(pausePhone);
+    tempGame = window.requestAnimationFrame(game);
+    gameAnimationFrame = true;
+    obstacleInterval = setInterval(createObstacles, 1500);
+  }, false);
 }
 
 function deathScreen() {
