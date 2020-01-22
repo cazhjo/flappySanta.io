@@ -1,3 +1,4 @@
+// Hämtar text från About.txt med hjälp av fetch (Ajax)
 fetch('About.txt')
 .then(response => response.text())
 .then(myText => {

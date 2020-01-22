@@ -7,16 +7,16 @@ function changeVisibility(show) {
     var box = $("#name-input-box");
 
     if (show) {
-        box.css("visibility", "visible")
+        box.css("visibility", "visible");
     }
     else {
-        box.css("visibility", "hidden")
+        box.css("visibility", "hidden");
     }
 }
 
 //Kollar om score är större än 0 för input rutan inte ska visas annars 
 function checkScore() {
-    let data = sessionStorage.getItem('tempScore')
+    let data = sessionStorage.getItem('tempScore');
     if (data > 0) {
         changeVisibility(true);
     }

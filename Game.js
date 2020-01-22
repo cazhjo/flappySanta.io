@@ -58,6 +58,10 @@ document.addEventListener('keydown', function (event) {
       playerImg = active;
       imgInt = setInterval(test, 5)
     }
+    else if (isDead) {
+      reset();
+      init();
+    }
     isActive = true;
   }
 }, false);
@@ -86,7 +90,6 @@ function game() {
   }
   else {
     ctx.drawImage(playerImg, x, y, 70, 60);
-    //ctx.strokeRect(x, y, 70, 60);
     isActive = false;
   }
 
@@ -178,7 +181,9 @@ function restart(event) {
     }
   }
 }
-document.addEventListener("click", restart)
+document.addEventListener("click", restart);
+
+
 
 function addScore(evt) {
   if (isDead) {
