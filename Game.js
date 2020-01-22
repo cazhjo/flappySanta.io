@@ -38,7 +38,6 @@ function init() {
   drawText(canv.width / 2, canv.height - 100, "30px arial", "white", "center", "Press space to start");
 
   pause = setInterval(startGame, 100);
-  addEventListener('touchend', startGamePhone(), true);
 
   // För att måla ut första stillbilden efter den har laddats in
   function drawImg() {
@@ -73,13 +72,6 @@ function jump(event) {
   isActive = true;
 }
 document.addEventListener('keydown', jump, false);
-document.addEventListener('touchend', function (event) {
-  if (velocity > -speed && !isDead) {
-    velocity = -12;
-    playerImg = active;
-    imgInt = setInterval(animate, 5)
-  }
-}, false);
 
 function game() {
   //Slutar animera när gameAnimationFrame är false
@@ -145,14 +137,6 @@ function startGame() {
     gameAnimationFrame = true;
     obstacleInterval = setInterval(createObstacles, 1500);
   }
-}
-
-function startGamePhone() {
-    clearInterval(pause);
-    tempGame = window.requestAnimationFrame(game);
-    gameAnimationFrame = true;
-    obstacleInterval = setInterval(createObstacles, 1500);
-    removeEventListener('touchend', startGamePhone, true);
 }
 
 function deathScreen() {
